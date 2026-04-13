@@ -1,0 +1,200 @@
+
+
+const intro = document.getElementById("intro");
+const main = document.getElementById("main");
+const music = document.getElementById("bgMusic");
+
+
+let musicStarted = false;
+
+function startMusic() {
+  if (musicStarted) return;
+
+  music.volume = 0.6;
+
+  music.play().then(() => {
+    musicStarted = true;
+  }).catch(err => {
+    console.log("Music blocked until user interacts:", err);
+  });
+}
+document.addEventListener("click", startMusic);
+document.addEventListener("touchstart", startMusic);
+/* =========================
+   🎬 CINEMATIC INTRO FLOW
+========================= */
+window.onload = () => {
+
+  // Try to play music (browser may block until interaction)
+  music.volume = 0.6;
+  music.play().catch(() => {
+    console.log("Autoplay blocked until user interaction");
+  });
+
+  // 10-second intro delay
+  setTimeout(() => {
+
+    // fade out intro
+    if (intro) {
+      intro.classList.add("fade-out");
+    }
+
+    // switch to main content
+    setTimeout(() => {
+      if (intro) intro.style.display = "none";
+      if (main) main.classList.remove("hidden");
+    }, 1500);
+
+  }, 2000); // ⏱ 2 seconds
+};
+
+/* =========================
+   🎵 MUSIC TOGGLE (OPTIONAL DISC)
+========================= */
+function toggleMusic() {
+  if (music.paused) {
+    music.play();
+  } else {
+    music.pause();
+  }
+}
+
+/* =========================
+   🔍 GUEST SEARCH (SMART MATCH)
+   - works with first name
+   - partial matching
+   - case insensitive
+========================= */
+async function searchGuest() {
+  const input = document
+    .getElementById("searchName")
+    .value
+    .trim()
+    .toLowerCase();
+
+  const resultBox = document.getElementById("result");
+
+  try {
+    // load guest list
+    const res = await fetch("./guests.json");
+
+    if (!res.ok) {
+      throw new Error("Failed to load guests.json");
+    }
+
+    const data = await res.json();
+
+    // smart partial match search
+    const matches = data.filter(g =>
+      g.name.toLowerCase().includes(input)
+    );
+
+    if (matches.length > 0) {
+      resultBox.innerHTML = matches
+        .map(g => `✨ <b>${g.name}</b> — ${g.role}`)
+        .join("<br>");
+    } else {
+      resultBox.innerText = "Not on list";
+    }
+
+  } catch (error) {
+    console.error(error);
+    resultBox.innerText = "Unable to load guest list.";
+  }
+}
+
+
+const images = [
+  { src: "img1.jpg", text: "A beautiful beginning" },
+  { src: "img2.jpg", text: "Forever starts here" },
+  { src: "img3.jpg", text: "A beautiful beginning" },
+  { src: "img4.jpg", text: "Forever starts here" },
+  { src: "img5.jpg", text: "A beautiful beginning" },
+  { src: "img6.jpg", text: "Forever starts here" },
+  { src: "img7.jpg", text: "A beautiful beginning" },
+  { src: "img8.jpg", text: "Forever starts here" },
+  { src: "img9.jpg", text: "A beautiful beginning" },
+  { src: "img10.jpg", text: "Forever starts here" },
+  { src: "img11.jpg", text: "Forever starts here" },
+  { src: "img12.jpg", text: "Forever starts here" }
+  // ➕ add more images here
+];
+
+let currentIndex = 0;
+
+const imgElement = document.getElementById("carouselImage");
+const caption = document.getElementById("captionText");
+
+/* =========================
+   UPDATE IMAGE (CINEMATIC)
+========================= */
+function updateCarousel() {
+  if (!imgElement) return;
+
+  // fade out
+  imgElement.classList.add("fade-out");
+
+  setTimeout(() => {
+    imgElement.src = images[currentIndex].src;
+    caption.innerText = images[currentIndex].text || "";
+
+    // fade in
+    imgElement.classList.remove("fade-out");
+  }, 300);
+}
+
+/* =========================
+   CONTROLS
+========================= */
+function nextSlide() {
+  currentIndex = (currentIndex + 1) % images.length;
+  updateCarousel();
+}
+
+function prevSlide() {
+  currentIndex = (currentIndex - 1 + images.length) % images.length;
+  updateCarousel();
+}
+
+/* =========================
+   SWIPE SUPPORT (MOBILE)
+========================= */
+let startX = 0;
+
+const carousel = document.getElementById("carousel");
+
+if (carousel) {
+  carousel.addEventListener("touchstart", (e) => {
+    startX = e.touches[0].clientX;
+  });
+
+  carousel.addEventListener("touchend", (e) => {
+    let endX = e.changedTouches[0].clientX;
+
+    if (startX - endX > 50) {
+      nextSlide(); // swipe left
+    } else if (endX - startX > 50) {
+      prevSlide(); // swipe right
+    }
+  });
+}
+
+/* =========================
+   INIT
+========================= */
+window.addEventListener("load", updateCarousel);
+
+/* 🌸 RANDOMIZE PETAL SIZES & SPEED */
+const petals = document.querySelectorAll(".petals span");
+
+petals.forEach(petal => {
+  const size = Math.random() * 10 + 8; // 8px - 18px
+  petal.style.width = size + "px";
+  petal.style.height = size + "px";
+
+  const duration = Math.random() * 5 + 7; // 7s - 12s
+  petal.style.animationDuration = duration + "s";
+
+  const delay = Math.random() * 5;
+  petal.style.animationDelay = delay + "s";
+});
