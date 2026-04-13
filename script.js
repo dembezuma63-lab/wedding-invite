@@ -105,18 +105,19 @@ async function searchGuest() {
 
 
 const images = [
-  { src: "img1.jpg", text: "A beautiful beginning" },
-  { src: "img2.jpg", text: "Forever starts here" },
-  { src: "img3.jpg", text: "A beautiful beginning" },
-  { src: "img4.jpg", text: "Forever starts here" },
-  { src: "img5.jpg", text: "A beautiful beginning" },
-  { src: "img6.jpg", text: "Forever starts here" },
-  { src: "img7.jpg", text: "A beautiful beginning" },
-  { src: "img8.jpg", text: "Forever starts here" },
-  { src: "img9.jpg", text: "A beautiful beginning" },
-  { src: "img10.jpg", text: "Forever starts here" },
-  { src: "img11.jpg", text: "Forever starts here" },
-  { src: "img12.jpg", text: "Forever starts here" }
+  { src: "img1.jpg", text: "Love is patient, love is kind." },
+  { src: "img2.jpg", text: "It does not envy," },
+  { src: "img3.jpg", text: "it does not boast, it is not proud." },
+  { src: "img4.jpg", text: "It does not dishonor others," },
+  { src: "img5.jpg", text: "it is not self-seeking," },
+  { src: "img6.jpg", text: "it is not easily angered," },
+  { src: "img7.jpg", text: "it keeps no record of wrongs." },
+  { src: "img8.jpg", text: "Love does not delight in evil" },
+  { src: "img9.jpg", text: "but rejoices with the truth." },
+  { src: "img10.jpg", text: "It always protects, always trusts" },
+  { src: "img11.jpg", text: "always hopes, always perseveres." },
+  { src: "img12.jpg", text: "1 Corinthians 13:4-7" }
+
   // ➕ add more images here
 ];
 
