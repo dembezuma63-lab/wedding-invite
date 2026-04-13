@@ -320,3 +320,20 @@ button {
   margin: 20px auto;
   opacity: 0.6;
 }
+
+/* Special styling for the final invitation caption */
+.invite-caption {
+  max-width: 600px;        /* Limits line width for better readability */
+  margin: 20px auto 0;     /* Centers the text horizontally */
+  line-height: 1.6;        /* Improves readability */
+  text-align: center;      /* Ensures proper alignment */
+  padding: 0 15px;         /* Prevents text from touching screen edges */
+}
+
+/* Mobile-specific adjustments */
+@media (max-width: 600px) {
+  .invite-caption {
+    font-size: 0.95rem;
+    line-height: 1.7;
+  }
+}

@@ -1,9 +1,6 @@
-
-
 const intro = document.getElementById("intro");
 const main = document.getElementById("main");
 const music = document.getElementById("bgMusic");
-
 
 let musicStarted = false;
 
@@ -20,32 +17,34 @@ function startMusic() {
 }
 document.addEventListener("click", startMusic);
 document.addEventListener("touchstart", startMusic);
+
 /* =========================
    🎬 CINEMATIC INTRO FLOW
 ========================= */
 window.onload = () => {
-
   // Try to play music (browser may block until interaction)
   music.volume = 0.6;
   music.play().catch(() => {
     console.log("Autoplay blocked until user interaction");
   });
 
-  // 10-second intro delay
+  // Intro delay
   setTimeout(() => {
-
-    // fade out intro
+    // Fade out intro
     if (intro) {
       intro.classList.add("fade-out");
     }
 
-    // switch to main content
+    // Switch to main content
     setTimeout(() => {
       if (intro) intro.style.display = "none";
       if (main) main.classList.remove("hidden");
     }, 1500);
+  }, 2000);
 
-  }, 2000); // ⏱ 2 seconds
+  // Initialize carousel and start auto-slide
+  updateCarousel();
+  startAutoSlide();
 };
 
 /* =========================
@@ -61,9 +60,6 @@ function toggleMusic() {
 
 /* =========================
    🔍 GUEST SEARCH (SMART MATCH)
-   - works with first name
-   - partial matching
-   - case insensitive
 ========================= */
 async function searchGuest() {
   const input = document
@@ -75,7 +71,6 @@ async function searchGuest() {
   const resultBox = document.getElementById("result");
 
   try {
-    // load guest list
     const res = await fetch("./guests.json");
 
     if (!res.ok) {
@@ -84,7 +79,6 @@ async function searchGuest() {
 
     const data = await res.json();
 
-    // smart partial match search
     const matches = data.filter(g =>
       g.name.toLowerCase().includes(input)
     );
@@ -102,8 +96,9 @@ async function searchGuest() {
     resultBox.innerText = "Unable to load guest list.";
   }
 }
-
-
+/* =========================
+   🖼️ CAROUSEL DATA
+========================= */
 const images = [
   { src: "img1.jpg", text: "Love is patient, love is kind." },
   { src: "img2.jpg", text: "It does not envy," },
@@ -117,35 +112,34 @@ const images = [
   { src: "img10.jpg", text: "It always protects, always trusts" },
   { src: "img11.jpg", text: "always hopes, always perseveres." },
   { src: "img12.jpg", text: "1 Corinthians 13:4-7" }
-
-  // ➕ add more images here
 ];
 
 let currentIndex = 0;
 
 const imgElement = document.getElementById("carouselImage");
 const caption = document.getElementById("captionText");
+const carousel = document.getElementById("carousel");
 
 /* =========================
-   UPDATE IMAGE (CINEMATIC)
+   🔄 UPDATE IMAGE (CINEMATIC)
 ========================= */
 function updateCarousel() {
   if (!imgElement) return;
 
-  // fade out
+  // Fade out effect
   imgElement.classList.add("fade-out");
 
   setTimeout(() => {
     imgElement.src = images[currentIndex].src;
-    caption.innerText = images[currentIndex].text || "";
-
-    // fade in
+    if (caption) {
+      caption.innerText = images[currentIndex].text || "";
+    }
     imgElement.classList.remove("fade-out");
   }, 300);
 }
 
 /* =========================
-   CONTROLS
+   ▶️ CONTROLS
 ========================= */
 function nextSlide() {
   currentIndex = (currentIndex + 1) % images.length;
@@ -158,11 +152,18 @@ function prevSlide() {
 }
 
 /* =========================
-   SWIPE SUPPORT (MOBILE)
+   ⏱️ AUTO SLIDE (CONTINUOUS)
+========================= */
+function startAutoSlide() {
+  setInterval(() => {
+    nextSlide();
+  }, 4000); // Change slide every 4 seconds
+}
+
+/* =========================
+   📱 SWIPE SUPPORT (MOBILE)
 ========================= */
 let startX = 0;
-
-const carousel = document.getElementById("carousel");
 
 if (carousel) {
   carousel.addEventListener("touchstart", (e) => {
@@ -173,9 +174,9 @@ if (carousel) {
     let endX = e.changedTouches[0].clientX;
 
     if (startX - endX > 50) {
-      nextSlide(); // swipe left
+      nextSlide(); // Swipe left
     } else if (endX - startX > 50) {
-      prevSlide(); // swipe right
+      prevSlide(); // Swipe right
     }
   });
 }
@@ -183,9 +184,15 @@ if (carousel) {
 /* =========================
    INIT
 ========================= */
-window.addEventListener("load", updateCarousel);
+window.addEventListener("load", () => {
+  updateCarousel();   // Show first image and caption
+  startAutoSlide();   // Start continuous auto sliding
+});
 
-/* 🌸 RANDOMIZE PETAL SIZES & SPEED */
+
+/* =========================
+   🌸 RANDOMIZE PETAL SIZES & SPEED
+========================= */
 const petals = document.querySelectorAll(".petals span");
 
 petals.forEach(petal => {
